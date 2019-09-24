@@ -36,7 +36,28 @@ public class ProcessDao {
 		session.commit();
 		session.close();
 	}
-	
+	public void updateData(ProductBean bean) throws SQLException{
+		SqlSession sqlSession = factory.openSession(); //수동
+		//SqlSession session = factory.openSession(true);//자동저장
+		sqlSession.update("updateData",bean);
+		sqlSession.commit();
+		sqlSession.close();
+	}
+	public boolean delData(int arg) {
+		SqlSession session = factory.openSession();
+		boolean b = false;
+		try {
+			int count = session.delete("deleteData",arg);
+			if(count > 0) b = true;
+			session.commit();
+		} catch(Exception e) {
+			System.out.println("delData err :" +e);
+			session.rollback();
+		} finally {
+			if(session != null) session.close();
+		}
+		return b;
+	}
 	
 
 }
